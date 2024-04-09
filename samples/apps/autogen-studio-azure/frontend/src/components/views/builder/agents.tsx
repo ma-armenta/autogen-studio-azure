@@ -34,9 +34,9 @@ const AgentsView = ({}: any) => {
     message: "All good",
   });
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listAgentsUrl = `${serverUrl}/agents?user_id=${user?.email}`;
+  const listAgentsUrl = `${serverUrl}/agents?user_id=${user?.email}&group_name=${activeGroup}`;
   const saveAgentsUrl = `${serverUrl}/agents`;
   const deleteAgentUrl = `${serverUrl}/agents/delete`;
 
@@ -117,6 +117,9 @@ const AgentsView = ({}: any) => {
   const saveAgent = (agent: IAgentFlowSpec) => {
     setError(null);
     setLoading(true);
+    if(activeGroup){
+      agent.group_name = activeGroup;
+    }
     // const fetch;
 
     const payLoad = {
@@ -155,7 +158,7 @@ const AgentsView = ({}: any) => {
       // console.log("fetching messages", messages);
       fetchAgents();
     }
-  }, []);
+  }, [activeGroup]);
 
   const agentRows = (agents || []).map((agent: IAgentFlowSpec, i: number) => {
     const cardItems = [
