@@ -13,12 +13,12 @@ import ChatBox from "../playground/chatbox";
 
 const GalleryView = ({ location }: any) => {
   const serverUrl = getServerUrl();
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const [loading, setLoading] = React.useState(false);
   const [gallery, setGallery] = React.useState<null | IGalleryItem[]>(null);
   const [currentGallery, setCurrentGallery] =
     React.useState<null | IGalleryItem>(null);
-  const listGalleryUrl = `${serverUrl}/gallery?user_id=${user?.email}`;
+  const listGalleryUrl = `${serverUrl}/gallery?user_id=${user?.email}&group_name=${activeGroup}`;
   const [error, setError] = React.useState<IStatus | null>({
     status: true,
     message: "All good",
@@ -41,11 +41,11 @@ const GalleryView = ({ location }: any) => {
       // navigate("/");
       fetchGallery(null);
     }
-  }, []);
+  }, [activeGroup]);
 
   const fetchGallery = (galleryId: string | null) => {
     const fetchGalleryUrl = galleryId
-      ? `${serverUrl}/gallery?gallery_id=${galleryId}`
+      ? `${serverUrl}/gallery?gallery_id=${galleryId}&group_name=${activeGroup}`
       : listGalleryUrl;
     setError(null);
     setLoading(true);
