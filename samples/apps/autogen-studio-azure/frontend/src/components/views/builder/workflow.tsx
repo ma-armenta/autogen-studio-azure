@@ -36,9 +36,9 @@ const WorkflowView = ({}: any) => {
     status: true,
     message: "All good",
   });
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listWorkflowsUrl = `${serverUrl}/workflows?user_id=${user?.email}`;
+  const listWorkflowsUrl = `${serverUrl}/workflows?user_id=${user?.email}&group_name=${activeGroup}`;
   const saveWorkflowsUrl = `${serverUrl}/workflows`;
   const deleteWorkflowsUrl = `${serverUrl}/workflows/delete`;
 
@@ -118,6 +118,9 @@ const WorkflowView = ({}: any) => {
   const saveWorkFlow = (workflow: IFlowConfig) => {
     setError(null);
     setLoading(true);
+    if(activeGroup){
+      workflow.group_name = activeGroup;
+    }
     // const fetch;
     const payLoad = {
       method: "POST",
@@ -154,7 +157,7 @@ const WorkflowView = ({}: any) => {
       // console.log("fetching messages", messages);
       fetchWorkFlow();
     }
-  }, []);
+  }, [activeGroup]);
 
   React.useEffect(() => {
     if (selectedWorkflow) {
