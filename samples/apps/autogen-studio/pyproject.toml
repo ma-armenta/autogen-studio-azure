@@ -19,7 +19,9 @@ classifiers = [
 
 
 dependencies = [
+    "psycopg2-binary",
     "pydantic",
+    "pydantic-settings",
     "fastapi",
     "typer",
     "uvicorn",
