@@ -34,9 +34,9 @@ const RAView = () => {
     message: "All good",
   });
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const fetchMessagesUrl = `${serverUrl}/messages?user_id=${user?.email}&session_id=${session?.id}`;
+  const fetchMessagesUrl = `${serverUrl}/messages?user_id=${user?.email}&session_id=${session?.id}&group_name=${activeGroup}`;
   const workflowConfig = useConfigStore((state) => state.workflowConfig);
 
   const fetchMessages = () => {
@@ -74,7 +74,7 @@ const RAView = () => {
       // console.log("fetching messages", messages);
       fetchMessages();
     }
-  }, [session]);
+  }, [session, activeGroup]);
 
   return (
     <div className="h-full   ">
