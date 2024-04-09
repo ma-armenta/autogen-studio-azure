@@ -3,6 +3,7 @@ export type NotificationType = "success" | "info" | "warning" | "error";
 export interface IMessage {
   user_id: string;
   root_msg_id: string;
+  group_name: string;
   msg_id?: string;
   role: string;
   content: string;
@@ -47,6 +48,7 @@ export interface IAgentConfig {
 export interface IAgentFlowSpec {
   type: "assistant" | "userproxy" | "groupchat";
   config: IAgentConfig;
+  group_name: string;
   timestamp?: string;
   id?: string;
   skills?: Array<ISkill>;
@@ -74,6 +76,7 @@ export interface IGroupChatFlowSpec {
 
 export interface IFlowConfig {
   name: string;
+  group_name: string;
   description: string;
   sender: IAgentFlowSpec;
   receiver: IAgentFlowSpec | IGroupChatFlowSpec;
@@ -86,6 +89,7 @@ export interface IFlowConfig {
 
 export interface IModelConfig {
   model: string;
+  group_name: string;
   api_key?: string;
   api_version?: string;
   base_url?: string;
@@ -107,6 +111,7 @@ export interface IMetadataFile {
 export interface IChatSession {
   id: string;
   user_id: string;
+  group_name: string;
   timestamp: string;
   flow_config: IFlowConfig;
   name: string;
@@ -114,6 +119,7 @@ export interface IChatSession {
 
 export interface IGalleryItem {
   id: string;
+  group_name: string;
   messages: Array<IMessage>;
   session: IChatSession;
   tags: Array<string>;
@@ -122,6 +128,7 @@ export interface IGalleryItem {
 
 export interface ISkill {
   title: string;
+  group_name: string;
   file_name?: string;
   content: string;
   id?: string;
