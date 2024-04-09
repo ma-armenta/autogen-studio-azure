@@ -28,9 +28,9 @@ const ModelsView = ({}: any) => {
     message: "All good",
   });
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listModelsUrl = `${serverUrl}/models?user_id=${user?.email}`;
+  const listModelsUrl = `${serverUrl}/models?user_id=${user?.email}&group_name=${activeGroup}`;
   const saveModelsUrl = `${serverUrl}/models`;
   const deleteModelUrl = `${serverUrl}/models/delete`;
   const testModelUrl = `${serverUrl}/models/test`;
@@ -39,6 +39,7 @@ const ModelsView = ({}: any) => {
     model: "gpt-4-1106-preview",
     description: "Sample OpenAI GPT-4 model",
     user_id: user?.email,
+    group_name: activeGroup ?? "public",
   };
 
   const [models, setModels] = React.useState<IModelConfig[] | null>([]);
@@ -114,6 +115,9 @@ const ModelsView = ({}: any) => {
   const saveModel = (model: IModelConfig) => {
     setError(null);
     setLoading(true);
+    if(activeGroup){
+      model.group_name = activeGroup;
+    }
 
     const payLoad = {
       method: "POST",
@@ -150,7 +154,7 @@ const ModelsView = ({}: any) => {
       // console.log("fetching messages", messages);
       fetchModels();
     }
-  }, []);
+  }, [activeGroup]);
 
   const modelRows = (models || []).map((model: IModelConfig, i: number) => {
     const cardItems = [
@@ -246,6 +250,9 @@ const ModelsView = ({}: any) => {
     const testModel = (model: IModelConfig) => {
       setModelStatus(null);
       setLoadingModelTest(true);
+      if(activeGroup){
+        model.group_name = activeGroup;
+      }
       const payLoad = {
         method: "POST",
         headers: {
@@ -342,7 +349,7 @@ const ModelsView = ({}: any) => {
             placeholder="Model Name"
             value={localModel?.model}
             onChange={(e) => {
-              setLocalModel({ ...localModel, model: e.target.value });
+              setLocalModel({ ...localModel, model: e.target.value, group_name: localModel?.group_name ?? "public" });
             }}
           />
           <Input.Password
