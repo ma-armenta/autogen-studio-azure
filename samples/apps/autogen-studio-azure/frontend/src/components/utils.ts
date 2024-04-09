@@ -246,6 +246,7 @@ export const formatDuration = (seconds: number) => {
 export const sampleAgentConfig = (user_id: string = "guestuser@gmail.com") => {
   const sampleAgent: IAgentFlowSpec = {
     type: "assistant",
+    group_name: activeGroup ?? "public",
     user_id: user_id,
     config: {
       name: "sample_assistant",
@@ -254,6 +255,7 @@ export const sampleAgentConfig = (user_id: string = "guestuser@gmail.com") => {
         config_list: [
           {
             model: "gpt-4-1106-preview",
+            group_name: activeGroup ?? "public",
           },
         ],
         temperature: 0.1,
