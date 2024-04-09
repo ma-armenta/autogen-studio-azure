@@ -357,3 +357,7 @@ div#gatsby-focus-wrapper {
   height: 100%;
   /* border: 1px solid green; */
 }
+
+.group-dropdown {
+  z-index: 9999;
+}
