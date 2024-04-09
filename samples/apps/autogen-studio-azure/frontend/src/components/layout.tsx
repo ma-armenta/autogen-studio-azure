@@ -2,6 +2,9 @@ import * as React from "react";
 import Header from "./header";
 import { appContext } from "../hooks/provider";
 import Footer from "./footer";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { InteractionStatus } from "@azure/msal-browser";
+import { loginRequest } from "../authConfig";
 
 /// import ant css
 import "antd/dist/reset.css";
@@ -23,6 +26,11 @@ const Layout = ({
   showHeader = true,
   restricted = false,
 }: Props) => {
+
+  const isAuth = useIsAuthenticated();
+  const { instance, inProgress } = useMsal();
+  const { user, setUser } = React.useContext(appContext);
+
   const layoutContent = (
     <div
       // style={{ height: "calc(100vh - 64px)" }}
@@ -37,6 +45,37 @@ const Layout = ({
     </div>
   );
 
+  const fetchData = async () => {
+    console.log("Fetching Data for user -> " + user);
+    if (!user) {
+      await instance.loginRedirect(loginRequest).then((response) => {
+        instance.setActiveAccount(instance.getAllAccounts()[0]);
+      });
+    }
+  }
+
+  const Login = () => {
+    React.useEffect(() => {
+      if (!isAuth && inProgress === InteractionStatus.None) {
+        fetchData();
+      } else {
+        const account = instance.getAllAccounts()[0];
+        if (account) {
+          const formattedNameArr = account.name?.split(", ");
+          setUser({
+            name: "" + (formattedNameArr?.[1] ?? "Invalid") + " " + (formattedNameArr?.[0] ?? "User"),
+            username: account.username,
+            email: account.username,
+            groups: account.idTokenClaims?.roles ?? [],
+          });
+        }
+      }
+
+    }, [isAuth, inProgress, instance, user]);
+
+    return null;
+  }
+
   const { darkMode } = React.useContext(appContext);
   React.useEffect(() => {
     document.getElementsByTagName("html")[0].className = `${
@@ -47,7 +86,14 @@ const Layout = ({
   return (
     <appContext.Consumer>
       {(context: any) => {
-        if (restricted) {
+        if (!isAuth) {
+          return (  
+          <>
+            <p>Authenticating....</p>
+            <Login />
+          </>
+          );
+        } else if (restricted) {
           return <div className="h-full ">{context.user && layoutContent}</div>;
         } else {
           return layoutContent;
