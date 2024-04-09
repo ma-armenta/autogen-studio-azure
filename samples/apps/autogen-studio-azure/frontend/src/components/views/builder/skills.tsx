@@ -33,9 +33,9 @@ const SkillsView = ({}: any) => {
     message: "All good",
   });
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listSkillsUrl = `${serverUrl}/skills?user_id=${user?.email}`;
+  const listSkillsUrl = `${serverUrl}/skills?user_id=${user?.email}&group_name=${activeGroup}`;
   const saveSkillsUrl = `${serverUrl}/skills`;
   const deleteSkillsUrl = `${serverUrl}/skills/delete`;
 
@@ -112,6 +112,9 @@ const SkillsView = ({}: any) => {
   const saveSkill = (skill: ISkill) => {
     setError(null);
     setLoading(true);
+    if(activeGroup){
+      skill.group_name = activeGroup;
+    }
     // const fetch;
     const payLoad = {
       method: "POST",
@@ -148,7 +151,7 @@ const SkillsView = ({}: any) => {
       // console.log("fetching messages", messages);
       fetchSkills();
     }
-  }, []);
+  }, [activeGroup]);
 
   const skillRows = (skills || []).map((skill: ISkill, i: number) => {
     const cardItems = [
