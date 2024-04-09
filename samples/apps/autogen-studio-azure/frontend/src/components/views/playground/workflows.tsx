@@ -18,9 +18,9 @@ const AgentsWorkflowView = () => {
   const workflowConfig = useConfigStore((state) => state.workflowConfig);
   const setWorkflowConfig = useConfigStore((state) => state.setWorkflowConfig);
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listWorkflowsUrl = `${serverUrl}/workflows?user_id=${user?.email}`;
+  const listWorkflowsUrl = `${serverUrl}/workflows?user_id=${user?.email}&group_name=${activeGroup}`;
 
   const [workflowConfigs, setWorkflowConfigs] = React.useState<IFlowConfig[]>(
     []
@@ -65,7 +65,7 @@ const AgentsWorkflowView = () => {
       // console.log("fetching messages", messages);
       fetchWorkFlow();
     }
-  }, []);
+  }, [activeGroup]);
 
   return (
     <div className=" mb-4 relative">
