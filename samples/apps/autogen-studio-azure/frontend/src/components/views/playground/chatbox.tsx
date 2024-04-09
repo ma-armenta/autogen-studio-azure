@@ -46,7 +46,7 @@ const ChatBox = ({
   const session: IChatSession | null = useConfigStore((state) => state.session);
   const textAreaInputRef = React.useRef<HTMLTextAreaElement>(null);
   const messageBoxInputRef = React.useRef<HTMLDivElement>(null);
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const wsClient = React.useRef<WebSocket | null>(null);
   const [wsConnectionStatus, setWsConnectionStatus] =
     React.useState<string>("disconnected");
@@ -402,6 +402,7 @@ const ChatBox = ({
 
     const messagePayload: IMessage = {
       role: "user",
+      group_name: activeGroup || "public",
       content: query,
       msg_id: userMessage.msg_id,
       user_id: user?.email || "",
