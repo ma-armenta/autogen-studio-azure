@@ -24,9 +24,9 @@ const SessionsView = ({}: any) => {
     message: "All good",
   });
 
-  const { user } = React.useContext(appContext);
+  const { user, activeGroup } = React.useContext(appContext);
   const serverUrl = getServerUrl();
-  const listSessionUrl = `${serverUrl}/sessions?user_id=${user?.email}`;
+  const listSessionUrl = `${serverUrl}/sessions?user_id=${user?.email}&group_name=${activeGroup}`;
   const createSessionUrl = `${serverUrl}/sessions`;
   const renameSessionUrl = `${serverUrl}/sessions/rename?name=`;
   const publishSessionUrl = `${serverUrl}/sessions/publish`;
@@ -110,6 +110,9 @@ const SessionsView = ({}: any) => {
   const publishSession = () => {
     setError(null);
     setLoading(true);
+    if (activeGroup && session) {
+      session.group_name = activeGroup;
+    }
 
     const body = {
       user_id: user?.email,
@@ -160,6 +163,7 @@ const SessionsView = ({}: any) => {
       user_id: user?.email,
       session: {
         user_id: user?.email,
+        group_name: activeGroup,
         flow_config: workflowConfig,
         session_id: null,
       },
@@ -235,7 +239,7 @@ const SessionsView = ({}: any) => {
       // console.log("fetching messages", messages);
       fetchSessions();
     }
-  }, []);
+  }, [activeGroup]);
 
   const [renameMenu, setRenameMenu] = React.useState<{[key: string]: {visible: number, nameValue: string}}>({});
   const sessionRows = sessions.map((data: IChatSession, index: number) => {
