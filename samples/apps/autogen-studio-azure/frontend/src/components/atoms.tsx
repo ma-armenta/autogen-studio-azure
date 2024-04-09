@@ -635,8 +635,8 @@ export const ModelSelector = ({
   const [models, setModels] = useState<IModelConfig[]>([]);
   const serverUrl = getServerUrl();
 
-  const { user } = React.useContext(appContext);
-  const listModelsUrl = `${serverUrl}/models?user_id=${user?.email}`;
+  const { user, activeGroup } = React.useContext(appContext);
+  const listModelsUrl = `${serverUrl}/models?user_id=${user?.email}&group_name=${activeGroup}`;
 
   // const sanitizeModelConfig = (config: IModelConfig) => {
   //   const sanitizedConfig: IModelConfig = { model: config.model };
@@ -1455,8 +1455,8 @@ export const SkillLoader = ({
     message: "All good",
   });
   const serverUrl = getServerUrl();
-  const { user } = React.useContext(appContext);
-  const listSkillsUrl = `${serverUrl}/skills?user_id=${user?.email}`;
+  const { user, activeGroup } = React.useContext(appContext);
+  const listSkillsUrl = `${serverUrl}/skills?user_id=${user?.email}&group_name=${activeGroup}`;
 
   const fetchSkills = () => {
     setError(null);
@@ -1742,8 +1742,8 @@ const AgentModal = ({
   const [selectedFlowSpec, setSelectedFlowSpec] = useState<number | null>(0);
 
   const serverUrl = getServerUrl();
-  const { user } = React.useContext(appContext);
-  const listAgentsUrl = `${serverUrl}/agents?user_id=${user?.email}`;
+  const { user, activeGroup } = React.useContext(appContext);
+  const listAgentsUrl = `${serverUrl}/agents?user_id=${user?.email}&group_name=${activeGroup}`;
 
   const [flowSpecs, setFlowSpecs] = useState<IAgentFlowSpec[]>([]);
   useEffect(() => {
